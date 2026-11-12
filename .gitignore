@@ -1,0 +1,18 @@
+# Generated Java output
+out/
+*.class
+
+# Local gameplay saves (keep data/sample_save.txt tracked)
+littlefarm_save.txt
+
+# OS/editor metadata
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+
+# Local secrets
+.env
+.env.*
+!.env.example
