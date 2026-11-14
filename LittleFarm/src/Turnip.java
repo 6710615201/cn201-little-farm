@@ -1,8 +1,10 @@
+// หัวผักกาดปลูกได้เฉพาะฤดูร้อนและหนาว
 import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Turnip extends Crop {
     @Override public String getName() { return "Turnip"; }
+    @Override public String[] getSeasonNames() { return new String[] {"Hot", "Cool"}; }
     @Override public int getDaysToMature() { return 3; }
     @Override public int getSeedPrice() { return 20; }
     @Override public int getSellPrice() { return 60; }

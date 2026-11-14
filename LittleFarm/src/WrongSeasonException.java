@@ -1,4 +1,4 @@
-/** The farmer tried to plant a crop in a season it does not grow in. */
+// รองรับการระบุฤดูทั้งเป็นชื่อข้อความและเป็นอ็อบเจ็กต์ Season
 public class WrongSeasonException extends FarmException {
     private final String cropName;
     private final String seasonName;
@@ -9,6 +9,15 @@ public class WrongSeasonException extends FarmException {
         this.seasonName = seasonName;
     }
 
-    public String getCropName() { return cropName; }
-    public String getSeasonName() { return seasonName; }
+    public WrongSeasonException(String cropName, Season season) {
+        this(cropName, season.getName());
+    }
+
+    public String getCropName() {
+        return cropName;
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
 }

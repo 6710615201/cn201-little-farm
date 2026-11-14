@@ -1,3 +1,4 @@
+// เพิ่มพายุและสุ่มตามโอกาสของฤดู; วันที่ไม่เกิดพายุใช้สัดส่วนแดด/ฝนเดิม จุดนี้ให้เพื่อนต่อ WeatherStrategy ภายหลัง
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;
@@ -5,7 +6,8 @@ import java.util.Random;
 /** Each kind of weather carries its own odds and effects, so adding a STORM means adding one constant. */
 public enum Weather {
     SUNNY("Sunny", "A fine sunny day", 75, false),
-    RAINY("Rain", "Rain today - no need to water", 25, true);
+    RAINY("Rain", "Rain today - no need to water", 25, true),
+    STORM("Storm", "Storm today - immature crops were lost", 0, true);
 
     private final String label;
     private final String morningText;
@@ -32,6 +34,13 @@ public enum Weather {
         return SUNNY;
     }
 
+    /** Seasonal storm chance; other days retain the original sunny/rainy ratio.
+     *  Integration point for the team's later WeatherStrategy implementation. */
+    public static Weather forecast(Random rng, Season season) {
+        if (rng.nextInt(100) < season.getStormChance()) return STORM;
+        return forecast(rng);
+    }
+
     /** A small icon about 20 pixels across, with (x, y) its top-left corner. */
     public void drawIcon(Graphics2D g, int x, int y) {
         switch (this) {
@@ -44,6 +53,7 @@ public enum Weather {
                                x + 10 + (int) (10 * Math.cos(a)), y + 10 + (int) (10 * Math.sin(a)));
                 }
                 break;
+            case STORM:
             case RAINY:
                 g.setColor(new Color(190, 200, 215));
                 g.fillOval(x, y + 4, 12, 10);

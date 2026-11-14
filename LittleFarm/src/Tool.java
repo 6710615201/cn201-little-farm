@@ -1,3 +1,4 @@
+// ส่งฤดูปัจจุบันไปพร้อมการใช้เครื่องมือ เพื่อให้ SeedBag ตรวจเงื่อนไขได้
 /** Something the farmer can hold and use on the tile in front of them. */
 public interface Tool {
     /** Short text for the toolbar, e.g. "Can 12/20". */
@@ -9,5 +10,5 @@ public interface Tool {
     int getEnergyCost();
 
     /** Does the job, or throws to say why it can't be done (and then costs no energy). */
-    void use(Tile tile) throws FarmException;
+    void use(Tile tile, Season season) throws FarmException;
 }

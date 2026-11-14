@@ -1,3 +1,4 @@
+// ข้ามวันตามลำดับ: โตจากน้ำเมื่อวาน แล้วพายุทำลายเฉพาะต้นที่ยังไม่โตเต็มที่ แล้วรับน้ำวันนี้
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -35,6 +36,10 @@ public class Farm {
 
     private final Tile[][] tiles = new Tile[ROWS][COLS];
     private Villager villager;
+    private int lastStormLosses;
+
+    /** Hook for the team's daily summary; reset each new day. */
+    public int getLastStormLosses() { return lastStormLosses; }
 
     public Farm() {
         for (int r = 0; r < ROWS; r++) {
@@ -80,9 +85,11 @@ public class Farm {
 
     /** Crops grow overnight, then the new day's weather may water everything. */
     public void newDay(Weather weather) {
+        lastStormLosses = 0;
         for (Tile[] line : tiles) {
             for (Tile tile : line) {
-                tile.newDay();
+                tile.newDay(); // yesterday's water grows the plant first
+                if (weather == Weather.STORM && tile.removeImmatureCrop()) lastStormLosses++;
                 if (weather.watersCrops()) tile.soak();
             }
         }
