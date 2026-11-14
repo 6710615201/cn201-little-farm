@@ -3,6 +3,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -78,23 +79,28 @@ public class SaveGame {
     }
 
     /** Fills a brand-new farm, farmer and clock from the file. */
-    public void loadInto(Farm farm, Farmer farmer, GameClock clock) throws IOException {
+    public void loadInto(Farm farm, Farmer farmer, GameClock clock) throws IOException, SaveFormatException {
         List<String> lines = Files.readAllLines(file);
-        if (lines.isEmpty() || !lines.get(0).equals(HEADER)) throw new IOException("not a Little Farm save file");
+        if (lines.isEmpty()) throw new SaveFormatException(1, "the file is empty");
+        if (!lines.get(0).equals(HEADER)) throw new SaveFormatException(1, "not a Little Farm save file");
 
         for (int i = 1; i < lines.size(); i++) {
             try {
                 loadLine(lines.get(i).trim().split(" "), i + 1, farm, farmer, clock);
+            } catch (SaveFormatException e) {
+                throw e;   // already says which line
+            } catch (UnknownCropException e) {
+                throw new SaveFormatException(i + 1, e.getMessage(), e);
             } catch (IllegalArgumentException | IndexOutOfBoundsException | FarmException e) {
                 // NumberFormatException is an IllegalArgumentException, so a bad number lands here too
-                throw new IOException("line " + (i + 1) + " is damaged: " + lines.get(i), e);
+                throw new SaveFormatException(i + 1, lines.get(i), e);
             }
         }
     }
 
     /** Sends one line of the file to the method that knows how to read that kind of entry. */
     private void loadLine(String[] parts, int lineNumber, Farm farm, Farmer farmer, GameClock clock)
-            throws IOException, FarmException {
+            throws FarmException {
         switch (parts[0]) {
             case "day":     loadDay(parts, clock); break;
             case "weather": loadWeather(parts, clock); break;
@@ -107,7 +113,7 @@ public class SaveGame {
             case "basket":  loadBasket(parts, farmer); break;
             case "soil":    loadSoil(farm, parts); break;
             case "":        break;   // blank line
-            default:        throw new IOException("line " + lineNumber + ": unknown entry '" + parts[0] + "'");
+            default:        throw new SaveFormatException(lineNumber, "unknown entry '" + parts[0] + "'");
         }
     }
 
@@ -131,7 +137,8 @@ public class SaveGame {
         farm.getVillager().restore(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
     }
 
-    private void loadRequest(String[] parts, Farm farm) {
+    private void loadRequest(String[] parts, Farm farm) throws UnknownCropException {
+        requireKnownCrop(parts[1]);
         farm.getVillager().setRequest(new Request(parts[1], Integer.parseInt(parts[2]),
                 Integer.parseInt(parts[3]), Integer.parseInt(parts[4])));
     }
@@ -140,12 +147,21 @@ public class SaveGame {
         farmer.getCan().setWater(Integer.parseInt(parts[1]));
     }
 
-    private void loadSeeds(String[] parts, Farmer farmer) {
+    private void loadSeeds(String[] parts, Farmer farmer) throws UnknownCropException {
+        requireKnownCrop(parts[1]);
         farmer.getSeedBag(parts[1]).setSeeds(Integer.parseInt(parts[2]));
     }
 
-    private void loadBasket(String[] parts, Farmer farmer) {
-        farmer.getBasket().add(parts[1], Integer.parseInt(parts[2]));
+    private void loadBasket(String[] parts, Farmer farmer) throws UnknownCropException {
+        requireKnownCrop(parts[1]);
+        int amount = Integer.parseInt(parts[2]);
+        if (amount < 1) throw new IllegalArgumentException("basket amount must be at least 1, not " + amount);
+        farmer.getBasket().add(parts[1], amount);
+    }
+
+    /** A crop name that no CropFactory entry knows would crash the game later, so refuse it here. */
+    private void requireKnownCrop(String name) throws UnknownCropException {
+        if (!Arrays.asList(CropFactory.NAMES).contains(name)) throw new UnknownCropException(name);
     }
 
     private void loadSoil(Farm farm, String[] parts) throws FarmException {
@@ -154,6 +170,7 @@ public class SaveGame {
         if (tile.getType() != TileType.SOIL) tile.till();
         if (parts.length > 5 && parts[5].equals("wet")) tile.soak();
         if (parts[3].equals("-")) return;
+        requireKnownCrop(parts[3]);
         Crop crop = CropFactory.create(parts[3]);
         crop.setDaysGrown(Integer.parseInt(parts[4]));
         tile.plant(crop);

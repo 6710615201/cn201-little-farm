@@ -31,7 +31,7 @@ public class GoldenSaveTest {
             "soil 7 6 - 0 dry",
             "soil 8 6 Strawberry 2 wet");
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         Path dir = Files.createTempDirectory("golden-save");
         try {
             System.out.println("=== 1. load a valid save, then save it again");
@@ -48,7 +48,7 @@ public class GoldenSaveTest {
         }
     }
 
-    private static void roundTrip(Path dir) throws IOException {
+    private static void roundTrip(Path dir) throws Exception {
         Path file = dir.resolve("valid.txt");
         Files.write(file, VALID);
         SaveGame save = new SaveGame(file.toString());
