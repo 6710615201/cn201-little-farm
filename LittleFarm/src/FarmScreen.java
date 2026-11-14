@@ -1,3 +1,4 @@
+// ส่งฤดูจากนาฬิกาเข้าสู่คำสั่งใช้เครื่องมือ ส่วนการแสดงข้อความผิดพลาดยังใช้ตัวจับ FarmException เดิม
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -130,7 +131,7 @@ public class FarmScreen implements Screen {
             }
             Tool tool = farmer.toolFor(tile);
             if (tool == null) throw new FarmException(tile.hasCrop() ? "Already watered - it grows tonight" : "Nothing to do here");
-            farmer.use(tool, tile);
+            farmer.use(tool, tile, clock.getSeason());
             if (checklist != null && tool instanceof SeedBag) checklist.complete(Checklist.Step.PLANT);
             if (checklist != null && tool instanceof WateringCan) checklist.complete(Checklist.Step.WATER);
         } catch (FarmException e) {

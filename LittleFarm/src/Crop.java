@@ -1,3 +1,4 @@
+// ให้พืชแต่ละชนิดบอกฤดูที่ปลูกได้ เพื่อใช้กฎเดียวกันทั้งตอนปลูกและตอนแสดงร้านค้า
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -9,6 +10,17 @@ public abstract class Crop {
     public abstract int getDaysToMature();
     public abstract int getSeedPrice();
     public abstract int getSellPrice();
+
+    /** The shop can display these names without duplicating planting rules. */
+    public abstract String[] getSeasonNames();
+
+    /** Restricts planting only; existing crops survive a change of season. */
+    public boolean canGrowIn(Season season) {
+        for (String name : getSeasonNames()) {
+            if (name.equals(season.getName())) return true;
+        }
+        return false;
+    }
 
     /** Draws the ripe produce; (cx, cy) is the base of the plant's stem. */
     protected abstract void drawProduce(Graphics2D g, int cx, int cy);

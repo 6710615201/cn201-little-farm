@@ -1,3 +1,4 @@
+// คำนวณฤดูจากเลขวัน ไม่เก็บค่าซ้ำ; สุ่มอากาศด้วยฤดูของวันใหม่หลังเพิ่มวัน
 import java.util.Random;
 
 /** Days run from 06:00 to midnight; the clock moves on ten minutes every two real seconds. */
@@ -9,6 +10,7 @@ public class GameClock {
     private static final int MINUTES_PER_STEP = 10;
 
     private int day = 1;
+    private final SeasonCalendar seasonCalendar = new SeasonCalendar();
     private int minutes = DAY_START;
     private int ticks = 0;
     private Weather weather = Weather.SUNNY;   // day 1 is always fine
@@ -26,10 +28,17 @@ public class GameClock {
         day++;
         minutes = DAY_START;
         ticks = 0;
-        weather = Weather.forecast(rng);
+        weather = Weather.forecast(rng, getSeason()); // use the new day's season
     }
 
     public int getDay() { return day; }
+    public Season getSeason() {
+        return seasonCalendar.seasonOf(day);
+    }
+
+    public int getDayInSeason() {
+        return seasonCalendar.dayInSeason(day);
+    }
     public int getMinutes() { return minutes; }
     public Weather getWeather() { return weather; }
     public void setWeather(Weather weather) { this.weather = weather; }

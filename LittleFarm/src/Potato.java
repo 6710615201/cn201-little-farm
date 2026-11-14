@@ -1,8 +1,10 @@
+// มันฝรั่งปลูกได้เฉพาะฤดูร้อนและฝน
 import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Potato extends Crop {
     @Override public String getName() { return "Potato"; }
+    @Override public String[] getSeasonNames() { return new String[] {"Hot", "Rainy"}; }
     @Override public int getDaysToMature() { return 5; }
     @Override public int getSeedPrice() { return 50; }
     @Override public int getSellPrice() { return 140; }

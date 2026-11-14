@@ -1,3 +1,4 @@
+// ส่งฤดูเข้าเครื่องมือ และหักพลังงานหลังใช้สำเร็จเท่านั้น จึงไม่เสียพลังงานเมื่อปลูกผิดฤดู
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -71,9 +72,9 @@ public class Farmer {
         }
     }
 
-    public void use(Tool tool, Tile tile) throws FarmException {
+    public void use(Tool tool, Tile tile, Season season) throws FarmException {
         if (energy < tool.getEnergyCost()) throw new FarmException("Too tired - go to bed in the house");
-        tool.use(tile);
+        tool.use(tile, season);
         energy -= tool.getEnergyCost();   // only reached if use() didn't throw
     }
 
