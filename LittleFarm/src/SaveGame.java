@@ -83,32 +83,69 @@ public class SaveGame {
         if (lines.isEmpty() || !lines.get(0).equals(HEADER)) throw new IOException("not a Little Farm save file");
 
         for (int i = 1; i < lines.size(); i++) {
-            String[] parts = lines.get(i).trim().split(" ");
             try {
-                switch (parts[0]) {
-                    case "day":     clock.setDay(Integer.parseInt(parts[1])); break;
-                    case "weather": clock.setWeather(Weather.valueOf(parts[1])); break;
-                    case "gold":    farmer.setGold(Integer.parseInt(parts[1])); break;
-                    case "earned":  farmer.setTotalEarned(Integer.parseInt(parts[1])); break;
-                    case "villager":
-                        farm.getVillager().restore(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
-                        break;
-                    case "request":
-                        farm.getVillager().setRequest(new Request(parts[1], Integer.parseInt(parts[2]),
-                                Integer.parseInt(parts[3]), Integer.parseInt(parts[4])));
-                        break;
-                    case "can":    farmer.getCan().setWater(Integer.parseInt(parts[1])); break;
-                    case "seeds":  farmer.getSeedBag(parts[1]).setSeeds(Integer.parseInt(parts[2])); break;
-                    case "basket": farmer.getBasket().add(parts[1], Integer.parseInt(parts[2])); break;
-                    case "soil":   loadSoil(farm, parts); break;
-                    case "":       break;   // blank line
-                    default:       throw new IOException("line " + (i + 1) + ": unknown entry '" + parts[0] + "'");
-                }
+                loadLine(lines.get(i).trim().split(" "), i + 1, farm, farmer, clock);
             } catch (IllegalArgumentException | IndexOutOfBoundsException | FarmException e) {
                 // NumberFormatException is an IllegalArgumentException, so a bad number lands here too
                 throw new IOException("line " + (i + 1) + " is damaged: " + lines.get(i), e);
             }
         }
+    }
+
+    /** Sends one line of the file to the method that knows how to read that kind of entry. */
+    private void loadLine(String[] parts, int lineNumber, Farm farm, Farmer farmer, GameClock clock)
+            throws IOException, FarmException {
+        switch (parts[0]) {
+            case "day":     loadDay(parts, clock); break;
+            case "weather": loadWeather(parts, clock); break;
+            case "gold":    loadGold(parts, farmer); break;
+            case "earned":  loadEarned(parts, farmer); break;
+            case "villager": loadVillager(parts, farm); break;
+            case "request": loadRequest(parts, farm); break;
+            case "can":     loadCan(parts, farmer); break;
+            case "seeds":   loadSeeds(parts, farmer); break;
+            case "basket":  loadBasket(parts, farmer); break;
+            case "soil":    loadSoil(farm, parts); break;
+            case "":        break;   // blank line
+            default:        throw new IOException("line " + lineNumber + ": unknown entry '" + parts[0] + "'");
+        }
+    }
+
+    private void loadDay(String[] parts, GameClock clock) {
+        clock.setDay(Integer.parseInt(parts[1]));
+    }
+
+    private void loadWeather(String[] parts, GameClock clock) {
+        clock.setWeather(Weather.valueOf(parts[1]));
+    }
+
+    private void loadGold(String[] parts, Farmer farmer) {
+        farmer.setGold(Integer.parseInt(parts[1]));
+    }
+
+    private void loadEarned(String[] parts, Farmer farmer) {
+        farmer.setTotalEarned(Integer.parseInt(parts[1]));
+    }
+
+    private void loadVillager(String[] parts, Farm farm) {
+        farm.getVillager().restore(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+    }
+
+    private void loadRequest(String[] parts, Farm farm) {
+        farm.getVillager().setRequest(new Request(parts[1], Integer.parseInt(parts[2]),
+                Integer.parseInt(parts[3]), Integer.parseInt(parts[4])));
+    }
+
+    private void loadCan(String[] parts, Farmer farmer) {
+        farmer.getCan().setWater(Integer.parseInt(parts[1]));
+    }
+
+    private void loadSeeds(String[] parts, Farmer farmer) {
+        farmer.getSeedBag(parts[1]).setSeeds(Integer.parseInt(parts[2]));
+    }
+
+    private void loadBasket(String[] parts, Farmer farmer) {
+        farmer.getBasket().add(parts[1], Integer.parseInt(parts[2]));
     }
 
     private void loadSoil(Farm farm, String[] parts) throws FarmException {
