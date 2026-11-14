@@ -1,7 +1,23 @@
-// ข้อผิดพลาดการปลูกผิดฤดู สืบทอดจาก FarmException เพื่อให้เกมแสดงข้อความแทนการหยุดทำงาน
-/** Expected planting failure, caught by the existing FarmException handler. */
+// รองรับการระบุฤดูทั้งเป็นชื่อข้อความและเป็นอ็อบเจ็กต์ Season
 public class WrongSeasonException extends FarmException {
+    private final String cropName;
+    private final String seasonName;
+
+    public WrongSeasonException(String cropName, String seasonName) {
+        super(cropName + " can't grow in the " + seasonName + " season");
+        this.cropName = cropName;
+        this.seasonName = seasonName;
+    }
+
     public WrongSeasonException(String cropName, Season season) {
-        super(cropName + " can't grow in " + season.getName() + " season");
+        this(cropName, season.getName());
+    }
+
+    public String getCropName() {
+        return cropName;
+    }
+
+    public String getSeasonName() {
+        return seasonName;
     }
 }

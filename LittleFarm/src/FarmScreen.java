@@ -49,7 +49,7 @@ public class FarmScreen implements Screen {
         try {
             game.getSaveGame().loadInto(screen.farm, screen.farmer, screen.clock);
             screen.say("Welcome back!");
-        } catch (IOException e) {
+        } catch (IOException | FarmException e) {
             screen = newGame(game);
             screen.say("Couldn't read the save (" + e.getMessage() + ") - started a new farm");
         }
