@@ -3,7 +3,7 @@ day 12
 season Rainy
 weather RAINY
 stormlosses 3
-gold abc
+gold 380
 earned 900
 can 12
 seeds Turnip 2
