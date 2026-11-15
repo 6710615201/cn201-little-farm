@@ -1,4 +1,3 @@
-// มันฝรั่งปลูกได้เฉพาะฤดูร้อนและฝน
 import java.awt.Color;
 import java.awt.Graphics2D;
 

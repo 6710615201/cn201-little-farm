@@ -1,4 +1,3 @@
-// รองรับการระบุฤดูทั้งเป็นชื่อข้อความและเป็นอ็อบเจ็กต์ Season
 public class WrongSeasonException extends FarmException {
     private final String cropName;
     private final String seasonName;

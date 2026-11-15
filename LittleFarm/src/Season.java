@@ -1,4 +1,3 @@
-// ชื่อฤดูใช้ตรวจเงื่อนไขการปลูก ส่วนไอคอนและสีส่งต่อให้เพื่อนทำหน้าจอ
 import java.awt.Color;
 
 public abstract class Season {

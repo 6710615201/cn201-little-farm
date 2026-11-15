@@ -1,4 +1,3 @@
-// บัวรดน้ำไม่ใช้ฤดู แต่รับพารามิเตอร์ให้ตรงกับ Tool; ใช้น้ำเมื่อรดสำเร็จเท่านั้น
 public class WateringCan implements Tool {
     private static final int CAPACITY = 20;
     private int water = CAPACITY;

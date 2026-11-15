@@ -1,4 +1,3 @@
-// เพิ่มพายุและสุ่มตามโอกาสของฤดู; วันที่ไม่เกิดพายุใช้สัดส่วนแดด/ฝนเดิม จุดนี้ให้เพื่อนต่อ WeatherStrategy ภายหลัง
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;

@@ -1,4 +1,3 @@
-// ตรวจเมล็ดและให้ Tile ตรวจฤดูก่อนหักเมล็ด ถ้าปลูกไม่ได้จำนวนเมล็ดยังคงเดิม
 /** One bag per crop type. Planting takes a seed out; the shop puts seeds in. */
 public class SeedBag implements Tool {
     private final String cropName;

@@ -1,4 +1,3 @@
-// แบ่งฤดูทุก 10 วัน: ร้อน 1–10 ฝน 11–20 หนาว 21–30; วันจบเกมยังใช้ฤดูหนาว
 public class SeasonCalendar {
     private final Season hotSeason = new HotSeason();
     private final Season rainySeason = new RainySeason();
