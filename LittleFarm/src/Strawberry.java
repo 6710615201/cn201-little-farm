@@ -1,4 +1,3 @@
-// สตรอว์เบอร์รีปลูกได้เฉพาะฤดูฝนและหนาว; การเก็บผลซ้ำยังใช้โค้ดเดิม
 import java.awt.Color;
 import java.awt.Graphics2D;
 

@@ -1,4 +1,3 @@
-// ส่งฤดูปัจจุบันไปพร้อมการใช้เครื่องมือ เพื่อให้ SeedBag ตรวจเงื่อนไขได้
 /** Something the farmer can hold and use on the tile in front of them. */
 public interface Tool {
     /** Short text for the toolbar, e.g. "Can 12/20". */

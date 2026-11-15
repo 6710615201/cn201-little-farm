@@ -1,4 +1,3 @@
-// ส่งฤดูเข้าเครื่องมือ และหักพลังงานหลังใช้สำเร็จเท่านั้น จึงไม่เสียพลังงานเมื่อปลูกผิดฤดู
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;

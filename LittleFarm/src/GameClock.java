@@ -1,4 +1,3 @@
-// คำนวณฤดูจากเลขวัน ไม่เก็บค่าซ้ำ; สุ่มอากาศด้วยฤดูของวันใหม่หลังเพิ่มวัน
 import java.util.Random;
 
 /** Days run from 06:00 to midnight; the clock moves on ten minutes every two real seconds. */

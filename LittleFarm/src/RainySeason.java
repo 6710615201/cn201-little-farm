@@ -1,9 +1,8 @@
-// ฤดูฝน: โอกาสพายุ 30% พร้อมชื่อและสีสำหรับระบบส่วนอื่น
 import java.awt.Color;
 
 public class RainySeason extends Season {
     public RainySeason() {
-        super(30, "☁");
+        super(30, "\u2601");
     }
 
     @Override public String getName() { return "Rainy"; }

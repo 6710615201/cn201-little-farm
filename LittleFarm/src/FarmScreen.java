@@ -1,4 +1,3 @@
-// ส่งฤดูจากนาฬิกาเข้าสู่คำสั่งใช้เครื่องมือ ส่วนการแสดงข้อความผิดพลาดยังใช้ตัวจับ FarmException เดิม
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;

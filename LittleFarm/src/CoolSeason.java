@@ -1,9 +1,8 @@
-// ฤดูหนาว: โอกาสพายุ 10% พร้อมชื่อและสีสำหรับระบบส่วนอื่น
 import java.awt.Color;
 
 public class CoolSeason extends Season {
     public CoolSeason() {
-        super(10, "❄");
+        super(10, "\u2744");
     }
 
     @Override public String getName() { return "Cool"; }

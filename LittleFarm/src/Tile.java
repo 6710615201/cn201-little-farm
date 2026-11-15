@@ -1,4 +1,3 @@
-// ตรวจดิน พืชเดิม และฤดูก่อนปลูก; เมธอดไม่มีฤดูคงไว้สำหรับกู้ข้อมูลเซฟ ไม่ใช่การปลูกใหม่
 /** One square of the farm. It guards its own rules: you cannot plant on grass or water a fence. */
 public class Tile {
     private TileType type;

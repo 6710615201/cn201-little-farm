@@ -1,4 +1,3 @@
-// ข้ามวันตามลำดับ: โตจากน้ำเมื่อวาน แล้วพายุทำลายเฉพาะต้นที่ยังไม่โตเต็มที่ แล้วรับน้ำวันนี้
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
