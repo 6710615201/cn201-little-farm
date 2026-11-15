@@ -15,6 +15,16 @@ public class Hud {
         g.setColor(Color.WHITE);
         int day = Math.min(clock.getDay(), FarmScreen.LAST_DAY);
         g.drawString("Day " + day + "/" + FarmScreen.LAST_DAY + "  " + clock.timeText(), 10, top + 20);
+
+        // Display the current season and the day within that season.
+        String seasonText = clock.getSeason().getName()
+            + " Season - Day " + clock.getDayInSeason() + "/10";
+
+        // Draw the season information below the current game day.
+        g.setFont(Ui.font(12));
+        g.setColor(Color.WHITE);
+
+
         clock.getWeather().drawIcon(g, 168, top + 5);
         g.setColor(Ui.HIGHLIGHT);
         g.drawString(farmer.getGold() + "/" + FarmScreen.GOAL_GOLD + "G", 198, top + 20);
@@ -37,6 +47,9 @@ public class Hud {
 
         g.setColor(new Color(230, 220, 200));
         g.drawString("Basket: " + farmer.getBasket(), 10, top + 71);
+        // Display season information beside the basket count.
+        g.drawString(seasonText, 150, top + 71);
+
         Request request = villager.getRequest();
         if (request != null) {
             String wants = "Wanted: " + request.getAmount() + " " + request.getCropName()
