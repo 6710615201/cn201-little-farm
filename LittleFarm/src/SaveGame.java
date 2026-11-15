@@ -10,7 +10,9 @@ import java.util.Map;
 /**
  * Saves the farm as plain text you can open and read, e.g.
  *   day 4
+ *   season Rainy               (must match the season of the day above)
  *   weather RAINY
+ *   stormlosses 3              (crops lost to storms since the game began)
  *   gold 380
  *   seeds Turnip 2
  *   request Turnip 3 360 4     (crop amount reward daysLeft)
@@ -51,7 +53,9 @@ public class SaveGame {
         try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(file))) {
             out.println(HEADER);
             out.println("day " + clock.getDay());
+            out.println("season " + clock.getSeason().getName());
             out.println("weather " + clock.getWeather().name());
+            out.println("stormlosses " + farm.getCropsLostToStorms());
             out.println("gold " + farmer.getGold());
             out.println("earned " + farmer.getTotalEarned());
             out.println("can " + farmer.getCan().getWater());
@@ -103,7 +107,9 @@ public class SaveGame {
             throws FarmException {
         switch (parts[0]) {
             case "day":     loadDay(parts, clock); break;
+            case "season":  loadSeason(parts, lineNumber, clock); break;
             case "weather": loadWeather(parts, clock); break;
+            case "stormlosses": loadStormLosses(parts, farm); break;
             case "gold":    loadGold(parts, farmer); break;
             case "earned":  loadEarned(parts, farmer); break;
             case "villager": loadVillager(parts, farm); break;
@@ -119,6 +125,19 @@ public class SaveGame {
 
     private void loadDay(String[] parts, GameClock clock) {
         clock.setDay(Integer.parseInt(parts[1]));
+    }
+
+    /** The season is worked out from the day, so the file must agree with it (the "day" line comes first). */
+    private void loadSeason(String[] parts, int lineNumber, GameClock clock) throws SaveFormatException {
+        String actual = clock.getSeason().getName();
+        if (!parts[1].equals(actual)) {
+            throw new SaveFormatException(lineNumber, "season " + parts[1] + " does not match day "
+                    + clock.getDay() + " (" + actual + ")");
+        }
+    }
+
+    private void loadStormLosses(String[] parts, Farm farm) {
+        farm.setCropsLostToStorms(Integer.parseInt(parts[1]));
     }
 
     private void loadWeather(String[] parts, GameClock clock) {
