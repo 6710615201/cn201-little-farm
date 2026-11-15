@@ -44,6 +44,11 @@ public class Farm {
     /** Total crops lost to storms since the start of the game. */
     public int getCropsLostToStorms() { return cropsLostToStorms; }
 
+    public void setCropsLostToStorms(int total) {
+        if (total < 0) throw new IllegalArgumentException("storm losses can't be negative: " + total);
+        cropsLostToStorms = total;
+    }
+
     public Farm() {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
