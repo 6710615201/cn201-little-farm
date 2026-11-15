@@ -36,9 +36,18 @@ public class Farm {
     private final Tile[][] tiles = new Tile[ROWS][COLS];
     private Villager villager;
     private int lastStormLosses;
+    private int cropsLostToStorms;
 
     /** Hook for the team's daily summary; reset each new day. */
     public int getLastStormLosses() { return lastStormLosses; }
+
+    /** Total crops lost to storms since the start of the game. */
+    public int getCropsLostToStorms() { return cropsLostToStorms; }
+
+    public void setCropsLostToStorms(int total) {
+        if (total < 0) throw new IllegalArgumentException("storm losses can't be negative: " + total);
+        cropsLostToStorms = total;
+    }
 
     public Farm() {
         for (int r = 0; r < ROWS; r++) {
@@ -92,6 +101,7 @@ public class Farm {
                 if (weather.watersCrops()) tile.soak();
             }
         }
+        cropsLostToStorms += lastStormLosses;
     }
 
     // ---- drawing --------------------------------------------------------------
