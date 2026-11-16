@@ -10,6 +10,7 @@ public class GameClock {
 
     private int day = 1;
     private final SeasonCalendar seasonCalendar = new SeasonCalendar();
+    private final WeatherStrategy weatherStrategy = WeatherFactory.create();
     private int minutes = DAY_START;
     private int ticks = 0;
     private Weather weather = Weather.SUNNY;   // day 1 is always fine
@@ -27,7 +28,7 @@ public class GameClock {
         day++;
         minutes = DAY_START;
         ticks = 0;
-        weather = Weather.forecast(rng, getSeason()); // use the new day's season
+        weather = weatherStrategy.forecast(rng, getSeason()); // use the new day's season
     }
 
     public int getDay() { return day; }
