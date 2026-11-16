@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.List;
@@ -18,23 +19,24 @@ public class Hud {
 
         // Display the current season and the day within that season.
         String seasonText = clock.getSeason().getName()
-            + " Season - Day " + clock.getDayInSeason() + "/10";
+                + " Season - Day " + clock.getDayInSeason() + "/10";
 
-        // Draw the season information below the current game day.
+        // Draw the season information beside the day and time.
         g.setFont(Ui.font(12));
         g.setColor(Color.WHITE);
-
+        g.drawString(seasonText, 300, top + 20);
 
         clock.getWeather().drawIcon(g, 168, top + 5);
         g.setColor(Ui.HIGHLIGHT);
         g.drawString(farmer.getGold() + "/" + FarmScreen.GOAL_GOLD + "G", 198, top + 20);
 
+        // Display the energy label and bar on the right side.
         g.setColor(Color.WHITE);
-        g.drawString("Energy", 340, top + 20);
+        g.drawString("Energy", 500, top + 20);
         g.setColor(new Color(40, 30, 20));
-        g.fillRect(410, top + 9, 150, 13);
+        g.fillRect(550, top + 9, 80, 13);
         g.setColor(farmer.getEnergy() < 25 ? new Color(230, 80, 60) : new Color(110, 210, 90));
-        g.fillRect(410, top + 9, 150 * farmer.getEnergy() / Farmer.MAX_ENERGY, 13);
+        g.fillRect(550, top + 9, 80 * farmer.getEnergy() / Farmer.MAX_ENERGY, 13);
 
         g.setFont(Ui.font(12));
         slot(g, 8, top + 30, farmer.getCan().getLabel(), false);
@@ -47,8 +49,6 @@ public class Hud {
 
         g.setColor(new Color(230, 220, 200));
         g.drawString("Basket: " + farmer.getBasket(), 10, top + 71);
-        // Display season information beside the basket count.
-        g.drawString(seasonText, 150, top + 71);
 
         Request request = villager.getRequest();
         if (request != null) {

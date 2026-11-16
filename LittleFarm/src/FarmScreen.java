@@ -256,6 +256,11 @@ public class FarmScreen implements Screen {
     @Override
     public void draw(Graphics2D g) {
         farm.draw(g);
+
+        // Apply the current season's color tint to the farm area.
+        g.setColor(clock.getSeason().getTint());
+        g.fillRect(0, 0, Ui.WIDTH, Ui.MAP_HEIGHT);
+
         int col = farmer.facingCol(), row = farmer.facingRow();
         g.setColor(new Color(255, 255, 255, 110));   // the tile SPACE will act on
         g.drawRect(col * Farm.TILE, row * Farm.TILE, Farm.TILE - 1, Farm.TILE - 1);
