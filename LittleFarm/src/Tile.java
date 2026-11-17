@@ -30,7 +30,7 @@ public class Tile {
         if (type == TileType.SOIL) watered = true;
     }
 
-    /** Gameplay planting validates before changing the plot or consuming a seed. */
+    /** Check the plot and season before the caller spends a seed or energy. */
     public void plant(Crop newCrop, Season season) throws FarmException {
         if (type != TileType.SOIL) throw new FarmException("Till the ground with the hoe first");
         if (crop != null) throw new FarmException("Something is already growing here");

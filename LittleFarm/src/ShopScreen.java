@@ -61,7 +61,7 @@ public class ShopScreen implements Screen {
 
         g.setFont(Ui.font(13));
         g.setColor(Ui.WOOD);
-        // Display the seasons in which each crop can be planted.
+        // Read the same crop rules used by Tile when the player plants a seed.
         g.drawString(String.format("%-11s %6s %8s %7s %8s  %s",
             "Crop", "Seed", "Grows", "Sells", "Profit", "Seasons"), left + 30, top + 80);
         for (int i = 0; i < crops.length; i++) {

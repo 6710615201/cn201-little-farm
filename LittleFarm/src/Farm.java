@@ -38,12 +38,13 @@ public class Farm {
     private int lastStormLosses;
     private int cropsLostToStorms;
 
-    /** Hook for the team's daily summary; reset each new day. */
+    /** Crops lost on the latest day transition, for the daily summary. */
     public int getLastStormLosses() { return lastStormLosses; }
 
     /** Total crops lost to storms since the start of the game. */
     public int getCropsLostToStorms() { return cropsLostToStorms; }
 
+    /** Restore the saved total. The save loader reports invalid values with a line number. */
     public void setCropsLostToStorms(int total) {
         if (total < 0) throw new IllegalArgumentException("storm losses can't be negative: " + total);
         cropsLostToStorms = total;
@@ -91,7 +92,10 @@ public class Farm {
         return count;
     }
 
-    /** Crops grow overnight, then the new day's weather may water everything. */
+    /**
+     * Apply yesterday's watering before checking storm damage so a crop
+     * that reaches maturity overnight survives. The new day's rain waters the soil afterward.
+     */
     public void newDay(Weather weather) {
         lastStormLosses = 0;
         for (Tile[] line : tiles) {
@@ -101,6 +105,7 @@ public class Farm {
                 if (weather.watersCrops()) tile.soak();
             }
         }
+        // Keep the total for saving and the latest day's count for the summary.
         cropsLostToStorms += lastStormLosses;
     }
 

@@ -83,12 +83,16 @@ public class SaveGame {
         }
     }
 
-    /** Fills a brand-new farm, farmer and clock from the file. */
+    /**
+     * Load into a fresh farm, farmer and clock. Older saves may omit fields such as
+     * weatherMode and stormlosses, in which case the new objects keep their defaults.
+     */
     public void loadInto(Farm farm, Farmer farmer, GameClock clock) throws IOException, SaveFormatException {
         List<String> lines = Files.readAllLines(file);
         if (lines.isEmpty()) throw new SaveFormatException(1, "the file is empty");
         if (!lines.get(0).equals(HEADER)) throw new SaveFormatException(1, "not a Little Farm save file");
 
+        // Skip the header, but keep its place when reporting one-based line numbers.
         for (int i = 1; i < lines.size(); i++) {
             try {
                 loadLine(lines.get(i).trim().split(" "), i + 1, farm, farmer, clock);
