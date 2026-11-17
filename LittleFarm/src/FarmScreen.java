@@ -22,7 +22,7 @@ public class FarmScreen implements Screen {
     private final Random rng = new Random();
     private final Farm farm = new Farm();
     private final Farmer farmer = new Farmer(DOOR_COL, DOOR_ROW, STARTING_GOLD);
-    private final GameClock clock = new GameClock();
+    private final GameClock clock;
     private final Bag<String> shippedToday = new Bag<>();   // paid out when the farmer sleeps
     private final List<FloatingText> floatingTexts = new ArrayList<>();
     private Checklist checklist;                           // only on the first day of a new game
@@ -30,21 +30,32 @@ public class FarmScreen implements Screen {
     private boolean warnedLate;
     private String message = "";
 
-    private FarmScreen(GamePanel game) {
+    // สร้างหน้าฟาร์มตามโหมดอากาศที่ผู้เล่นเลือก
+    private FarmScreen(GamePanel game, String weatherMode) {
         this.game = game;
+
+    // สร้าง GameClock ด้วย Strategy ของโหมดที่เลือก
+        this.clock = new GameClock(weatherMode);
+
+    // เพิ่มเมล็ด Turnip สำหรับเริ่มต้นเกม
         farmer.getSeedBag("Turnip").addSeeds(STARTING_SEEDS);
     }
 
-    public static FarmScreen newGame(GamePanel game) {
-        FarmScreen screen = new FarmScreen(game);
+    public static FarmScreen newGame(GamePanel game, String weatherMode) {
+        FarmScreen screen = new FarmScreen(game, weatherMode);
         screen.checklist = new Checklist();
         screen.say("Walk to the brown soil and press SPACE - the label shows what it will do");
         screen.beginDay();
         return screen;
     }
 
+    // รองรับการเรียกแบบเดิม โดยใช้ Normal เป็นค่าเริ่มต้น
+    public static FarmScreen newGame(GamePanel game) {
+        return newGame(game, "normal");
+    }
+
     public static FarmScreen load(GamePanel game) {
-        FarmScreen screen = new FarmScreen(game);
+        FarmScreen screen = new FarmScreen(game, "normal");
         try {
             game.getSaveGame().loadInto(screen.farm, screen.farmer, screen.clock);
             screen.say("Welcome back!");

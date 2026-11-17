@@ -55,6 +55,7 @@ public class SaveGame {
             out.println("day " + clock.getDay());
             out.println("season " + clock.getSeason().getName());
             out.println("weather " + clock.getWeather().name());
+            out.println("weatherMode " + clock.getWeatherMode());
             out.println("stormlosses " + farm.getCropsLostToStorms());
             out.println("gold " + farmer.getGold());
             out.println("earned " + farmer.getTotalEarned());
@@ -109,6 +110,7 @@ public class SaveGame {
             case "day":     loadDay(parts, clock); break;
             case "season":  loadSeason(parts, lineNumber, clock); break;
             case "weather": loadWeather(parts, clock); break;
+            case "weatherMode": loadWeatherMode(parts, clock); break;
             case "stormlosses": loadStormLosses(parts, farm); break;
             case "gold":    loadGold(parts, farmer); break;
             case "earned":  loadEarned(parts, farmer); break;
@@ -142,6 +144,11 @@ public class SaveGame {
 
     private void loadWeather(String[] parts, GameClock clock) {
         clock.setWeather(Weather.valueOf(parts[1]));
+    }
+
+    // โหลดโหมด Strategy ที่ผู้เล่นเลือกจากไฟล์ Save
+    private void loadWeatherMode(String[] parts, GameClock clock) {
+        clock.setWeatherMode(parts[1]);
     }
 
     private void loadGold(String[] parts, Farmer farmer) {
