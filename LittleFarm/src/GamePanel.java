@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -23,19 +24,45 @@ public class GamePanel extends JPanel implements ActionListener {
     private final Set<Integer> keysDown = new HashSet<>();
     private final SaveGame saveGame = new SaveGame("littlefarm_save.txt");
     private Screen screen;
+
+    // Store the weather strategy selected when the game starts.
+    private final WeatherStrategy weatherStrategy;
+
     private int frames;
 
+    // Keep the original constructor for existing code.
     public GamePanel() {
+        this(WeatherFactory.create());
+    }
+
+    // Allow Main to provide the selected weather strategy.
+    public GamePanel(WeatherStrategy weatherStrategy) {
+        if (weatherStrategy == null) {
+            throw new IllegalArgumentException("Weather strategy cannot be null");
+        }
+
+        // Save the selected strategy so game screens can access it.
+        this.weatherStrategy = weatherStrategy;
+
+        // Keep the original GamePanel initialization code.
         setPreferredSize(new Dimension((int) (Ui.WIDTH * START_SCALE), (int) (Ui.HEIGHT * START_SCALE)));
         setBackground(Color.BLACK);   // the bars beside the game when the window's shape doesn't match
         setFocusable(true);
+
+        // Keep the original keyboard event handling.
         addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) { pressKey(e.getKeyCode()); }
+            public void keyPressed(KeyEvent e) {
+                pressKey(e.getKeyCode());
+            }
 
             @Override
-            public void keyReleased(KeyEvent e) { releaseKey(e.getKeyCode()); }
+            public void keyReleased(KeyEvent e) {
+                releaseKey(e.getKeyCode());
+            }
         });
+
+        // Show the title screen when the game starts.
         screen = new TitleScreen(this);
     }
 
@@ -56,6 +83,11 @@ public class GamePanel extends JPanel implements ActionListener {
     public void showTitle() { screen = new TitleScreen(this); }
     public SaveGame getSaveGame() { return saveGame; }
     public int getFrames() { return frames; }
+
+    // Provide the selected strategy to the game screens.
+    public WeatherStrategy getWeatherStrategy() {
+        return weatherStrategy;
+    }
 
     public boolean isHeld(int key, int otherKey) {
         return keysDown.contains(key) || keysDown.contains(otherKey);

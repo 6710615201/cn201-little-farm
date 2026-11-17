@@ -10,10 +10,27 @@ public class GameClock {
 
     private int day = 1;
     private final SeasonCalendar seasonCalendar = new SeasonCalendar();
-    private final WeatherStrategy weatherStrategy = WeatherFactory.create();
+
+    // Store the weather strategy selected at game startup.
+    private final WeatherStrategy weatherStrategy;
+
     private int minutes = DAY_START;
     private int ticks = 0;
-    private Weather weather = Weather.SUNNY;   // day 1 is always fine
+    private Weather weather = Weather.SUNNY;
+
+    // Preserve the original constructor for existing game code.
+    public GameClock() {
+        this(WeatherFactory.create());
+    }
+
+    // Allow the game to receive a selected weather strategy.
+    public GameClock(WeatherStrategy weatherStrategy) {
+        if (weatherStrategy == null) {
+            throw new IllegalArgumentException("Weather strategy cannot be null");
+        }
+
+        this.weatherStrategy = weatherStrategy;
+    }
 
     public void tick() {
         if (++ticks >= TICKS_PER_STEP) {
