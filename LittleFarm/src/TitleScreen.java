@@ -12,6 +12,14 @@ public class TitleScreen implements Screen {
     public TitleScreen(GamePanel game) {
         this.game = game;
 
+        String startupWeatherMode = game.getStartupWeatherMode();
+        Runnable startNewFarm;
+        if (startupWeatherMode == null) {
+            startNewFarm = () -> game.setScreen(new WeatherModeScreen(game, this));
+        } else {
+            startNewFarm = () -> game.setScreen(FarmScreen.newGame(game, startupWeatherMode));
+        }
+
         // Check for an existing save.
         String saved = game.getSaveGame().describe();
 
@@ -28,13 +36,10 @@ public class TitleScreen implements Screen {
                     "Start over",
                     "Keep my farm",
                     true,
-                    // Open the weather mode screen after confirmation.
-                    () -> game.setScreen(new WeatherModeScreen(game, this))
+                    startNewFarm
             )));
         } else {
-            // Open the weather mode screen when there is no existing save.
-            menu.add("New farm",
-                    () -> game.setScreen(new WeatherModeScreen(game, this)));
+            menu.add("New farm", startNewFarm);
         }
 
         // Add the other title options.
