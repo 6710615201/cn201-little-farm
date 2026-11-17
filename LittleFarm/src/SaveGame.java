@@ -146,7 +146,7 @@ public class SaveGame {
         clock.setWeather(Weather.valueOf(parts[1]));
     }
 
-    // โหลดโหมด Strategy ที่ผู้เล่นเลือกจากไฟล์ Save
+    // Restore the selected weather mode from the save file.
     private void loadWeatherMode(String[] parts, GameClock clock) {
         clock.setWeatherMode(parts[1]);
     }

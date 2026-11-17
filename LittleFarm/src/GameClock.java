@@ -1,7 +1,7 @@
 
 import java.util.Random;
 
-// นาฬิกาของเกม เดินเวลาจาก 06:00 ถึงเที่ยงคืน
+// Tracks game time from 06:00 to midnight.
 public class GameClock {
     private static final int DAY_START = 6 * 60;
     private static final int DAY_END = 24 * 60;
@@ -12,7 +12,7 @@ public class GameClock {
     private int day = 1;
     private final SeasonCalendar seasonCalendar = new SeasonCalendar();
 
-    // เก็บชื่อโหมดและ Strategy ที่ใช้พยากรณ์อากาศ
+    // Keep the selected mode and its forecasting strategy.
     private String weatherMode;
     private WeatherStrategy weatherStrategy;
 
@@ -20,23 +20,23 @@ public class GameClock {
     private int ticks = 0;
     private Weather weather = Weather.SUNNY;
 
-    // สร้าง GameClock โดยใช้ Normal เป็นค่าเริ่มต้น
+    // Default to Normal weather.
     public GameClock() {
         this("normal");
     }
 
-    // สร้าง GameClock ตามโหมดอากาศที่ได้รับ
+    // Initialize the clock with the selected weather mode.
     public GameClock(String weatherMode) {
         setWeatherMode(weatherMode);
     }
 
-    // เปลี่ยน Strategy และเก็บชื่อโหมดที่เลือกไว้
+    // Update both the stored mode and its forecasting strategy.
     public void setWeatherMode(String weatherMode) {
         this.weatherMode = StrategyFactory.normalizeName(weatherMode);
         this.weatherStrategy = StrategyFactory.create(this.weatherMode);
     }
 
-    // คืนชื่อโหมดอากาศปัจจุบัน เพื่อนำไปบันทึกใน Save
+    // Return the mode name for saving.
     public String getWeatherMode() {
         return weatherMode;
     }
@@ -52,7 +52,7 @@ public class GameClock {
         return minutes >= DAY_END;
     }
 
-    // เริ่มวันใหม่และพยากรณ์อากาศด้วย Strategy ที่เลือกไว้
+    // Use the active strategy to forecast weather for the new day.
     public void nextDay(Random rng) {
         day++;
         minutes = DAY_START;
@@ -94,7 +94,7 @@ public class GameClock {
         this.day = day;
     }
 
-    // คำนวณความมืดในช่วงเย็น
+    // Calculate how dark the evening has become.
     public int darkness() {
         if (minutes < DUSK) {
             return 0;

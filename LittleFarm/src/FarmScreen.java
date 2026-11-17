@@ -30,14 +30,14 @@ public class FarmScreen implements Screen {
     private boolean warnedLate;
     private String message = "";
 
-    // สร้างหน้าฟาร์มตามโหมดอากาศที่ผู้เล่นเลือก
+    // Create the farm screen for the selected weather mode.
     private FarmScreen(GamePanel game, String weatherMode) {
         this.game = game;
 
-    // สร้าง GameClock ด้วย Strategy ของโหมดที่เลือก
+    // Initialize the clock with the selected weather mode.
         this.clock = new GameClock(weatherMode);
 
-    // เพิ่มเมล็ด Turnip สำหรับเริ่มต้นเกม
+    // Give the farmer Turnip seeds to start the game.
         farmer.getSeedBag("Turnip").addSeeds(STARTING_SEEDS);
     }
 
@@ -49,7 +49,7 @@ public class FarmScreen implements Screen {
         return screen;
     }
 
-    // รองรับการเรียกแบบเดิม โดยใช้ Normal เป็นค่าเริ่มต้น
+    // Use Normal when no weather mode is provided.
     public static FarmScreen newGame(GamePanel game) {
         return newGame(game, "normal");
     }

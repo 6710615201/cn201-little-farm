@@ -1,25 +1,25 @@
 
 import java.util.Locale;
 
-// Factory สำหรับสร้าง WeatherStrategy ตามโหมดที่ผู้เล่นเลือก
+// Creates a weather strategy for the selected mode.
 public class StrategyFactory {
 
-    // ป้องกันการสร้าง Object ของ Factory
+    // Prevent instantiation.
     private StrategyFactory() {
     }
 
-    // แปลงชื่อโหมดให้เป็นชื่อมาตรฐาน และตรวจสอบโหมดที่รองรับ
+    // Normalize the mode name and validate it.
     public static String normalizeName(String name) {
 
-        // หากไม่มีชื่อโหมด ให้ใช้ Normal เป็นค่าเริ่มต้น
+        // Use Normal if a mode is missing.
         if (name == null || name.trim().isEmpty()) {
             return "normal";
         }
 
-        // ตัดช่องว่างและแปลงเป็นตัวพิมพ์เล็ก
+        // Trim the name and make it lowercase.
         String selected = name.trim().toLowerCase(Locale.ROOT);
 
-        // ตรวจสอบว่าเป็นโหมดที่รองรับหรือไม่
+        // Accept the supported mode names.
         switch (selected) {
             case "normal":
             case "drought":
@@ -27,7 +27,7 @@ public class StrategyFactory {
                 return selected;
 
             default:
-                // แจ้งเตือนและกลับไปใช้ Normal หากชื่อโหมดไม่ถูกต้อง
+                // Warn about an unknown mode and fall back to Normal.
                 System.err.println(
                     "Unknown weather strategy '" + name + "'. Using normal."
                 );
@@ -35,10 +35,10 @@ public class StrategyFactory {
         }
     }
 
-    // สร้าง WeatherStrategy ตามชื่อโหมด
+    // Create a strategy for the given mode name.
     public static WeatherStrategy create(String name) {
 
-        // ใช้ชื่อโหมดมาตรฐานก่อนสร้าง Strategy
+        // Normalize the name before choosing a strategy.
         String selected = normalizeName(name);
 
         switch (selected) {
