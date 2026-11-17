@@ -203,6 +203,15 @@ public class FarmScreen implements Screen {
         farmer.earn(earned);
         clock.nextDay(rng);
         farm.newDay(clock.getWeather());
+
+        // Get the number of immature crops destroyed by the storm.
+        int stormLosses = farm.getLastStormLosses();
+
+        // Report storm damage in the daily summary when crops were lost.
+        if (stormLosses > 0) {
+            lines.add("Storm destroyed " + stormLosses + " immature crops!");
+        }
+
         String news = farm.getVillager().newDay(clock.getDay(), rng);
         if (news != null) lines.add(news);
         farmer.wakeUp(DOOR_COL, DOOR_ROW, passedOut);
