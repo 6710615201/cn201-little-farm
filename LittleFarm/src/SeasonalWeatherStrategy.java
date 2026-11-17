@@ -5,11 +5,11 @@ public class SeasonalWeatherStrategy implements WeatherStrategy {
     // Forecast weather using the current season.
     @Override
     public Weather forecast(Random rng, Season season) {
-        // Check the storm chance for the current season.
+        // Roll for a seasonal storm before using the sunny/rainy distribution.
         if (rng.nextInt(100) < season.getStormChance()) {
             return Weather.STORM;
         }
-        // Use the original sunny and rainy forecast if no storm occurs.
+        // These odds apply only to the days that pass the storm check.
         return Weather.forecast(rng);
     }
 }

@@ -20,6 +20,7 @@ public class SeasonCalendar {
         if (day < 1) {
             throw new IllegalArgumentException("day must be at least 1");
         }
+        // The ending screen can advance past day 30, but the last season stays complete.
         if (day > 30) {
             return 10;
         }
