@@ -2,24 +2,24 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-// หน้าจอหลักของเกม
+// The game's title screen.
 public class TitleScreen implements Screen {
     private final GamePanel game;
-    private final Farm backdrop = new Farm();   // ฟาร์มพื้นหลังของหน้าเมนู
+    private final Farm backdrop = new Farm();   // Farm backdrop for the title menu
     private final Menu menu = new Menu();
 
-    // สร้างตัวเลือกต่าง ๆ บนหน้า Title
+    // Build the title menu.
     public TitleScreen(GamePanel game) {
         this.game = game;
 
-        // ตรวจสอบว่ามี Save เดิมหรือไม่
+        // Check for an existing save.
         String saved = game.getSaveGame().describe();
 
         if (saved != null) {
-            // Continue ยังคงโหลดฟาร์มเดิมตามปกติ
+            // Continue loads the existing farm.
             menu.add("Continue  (" + saved + ")", () -> FarmScreen.load(game));
 
-            // ถ้ามี Save ต้องยืนยันก่อนเริ่มฟาร์มใหม่
+            // Ask for confirmation before starting over.
             menu.add("New farm", () -> game.setScreen(new ConfirmScreen(
                     game,
                     this,
@@ -28,27 +28,27 @@ public class TitleScreen implements Screen {
                     "Start over",
                     "Keep my farm",
                     true,
-                    // เมื่อยืนยันแล้ว ให้เปิดหน้าเลือกโหมดอากาศ
+                    // Open the weather mode screen after confirmation.
                     () -> game.setScreen(new WeatherModeScreen(game, this))
             )));
         } else {
-            // ถ้าไม่มี Save สามารถเลือกโหมดอากาศได้ทันที
+            // Open the weather mode screen when there is no existing save.
             menu.add("New farm",
                     () -> game.setScreen(new WeatherModeScreen(game, this)));
         }
 
-        // ตัวเลือกเดิมของหน้า Title
+        // Add the other title options.
         menu.add("How to play", () -> game.setScreen(new HelpScreen(game, this)));
         menu.add("Quit", game::quit);
     }
 
-    // รับปุ่มกดเพื่อควบคุมเมนู
+    // Pass key presses to the menu.
     @Override
     public void keyPressed(int code) {
         menu.keyPressed(code);
     }
 
-    // วาดหน้าจอหลัก
+    // Draw the title screen.
     @Override
     public void draw(Graphics2D g) {
         backdrop.draw(g);
@@ -64,7 +64,7 @@ public class TitleScreen implements Screen {
         Ui.centered(g, "Pay it off by the end of day " + FarmScreen.LAST_DAY + ".",
                 15, 202, Color.WHITE);
 
-        // วาดเมนูหลัก
+        // Draw the title menu.
         menu.draw(g, 270, Color.WHITE);
 
         Ui.centered(g, "UP/DOWN choose    ENTER select",
