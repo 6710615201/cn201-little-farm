@@ -33,13 +33,6 @@ public enum Weather {
         return SUNNY;
     }
 
-    /** Seasonal storm chance; other days retain the original sunny/rainy ratio.
-     *  Integration point for the team's later WeatherStrategy implementation. */
-    public static Weather forecast(Random rng, Season season) {
-        if (rng.nextInt(100) < season.getStormChance()) return STORM;
-        return forecast(rng);
-    }
-
     /** A small icon about 20 pixels across, with (x, y) its top-left corner. */
     public void drawIcon(Graphics2D g, int x, int y) {
         switch (this) {
