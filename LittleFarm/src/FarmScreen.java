@@ -22,7 +22,7 @@ public class FarmScreen implements Screen {
     private final Random rng = new Random();
     private final Farm farm = new Farm();
     private final Farmer farmer = new Farmer(DOOR_COL, DOOR_ROW, STARTING_GOLD);
-    private final GameClock clock = new GameClock();
+    private final GameClock clock;
     private final Bag<String> shippedToday = new Bag<>();   // paid out when the farmer sleeps
     private final List<FloatingText> floatingTexts = new ArrayList<>();
     private Checklist checklist;                           // only on the first day of a new game
@@ -30,25 +30,36 @@ public class FarmScreen implements Screen {
     private boolean warnedLate;
     private String message = "";
 
-    private FarmScreen(GamePanel game) {
+    // Create the farm screen for the selected weather mode.
+    private FarmScreen(GamePanel game, String weatherMode) {
         this.game = game;
+
+    // Initialize the clock with the selected weather mode.
+        this.clock = new GameClock(weatherMode);
+
+    // Give the farmer Turnip seeds to start the game.
         farmer.getSeedBag("Turnip").addSeeds(STARTING_SEEDS);
     }
 
-    public static FarmScreen newGame(GamePanel game) {
-        FarmScreen screen = new FarmScreen(game);
+    public static FarmScreen newGame(GamePanel game, String weatherMode) {
+        FarmScreen screen = new FarmScreen(game, weatherMode);
         screen.checklist = new Checklist();
         screen.say("Walk to the brown soil and press SPACE - the label shows what it will do");
         screen.beginDay();
         return screen;
     }
 
+    // Use Normal when no weather mode is provided.
+    public static FarmScreen newGame(GamePanel game) {
+        return newGame(game, "normal");
+    }
+
     public static FarmScreen load(GamePanel game) {
-        FarmScreen screen = new FarmScreen(game);
+        FarmScreen screen = new FarmScreen(game, "normal");
         try {
             game.getSaveGame().loadInto(screen.farm, screen.farmer, screen.clock);
             screen.say("Welcome back!");
-        } catch (IOException e) {
+        } catch (IOException | FarmException e) {
             screen = newGame(game);
             screen.say("Couldn't read the save (" + e.getMessage() + ") - started a new farm");
         }
@@ -130,7 +141,7 @@ public class FarmScreen implements Screen {
             }
             Tool tool = farmer.toolFor(tile);
             if (tool == null) throw new FarmException(tile.hasCrop() ? "Already watered - it grows tonight" : "Nothing to do here");
-            farmer.use(tool, tile);
+            farmer.use(tool, tile, clock.getSeason());
             if (checklist != null && tool instanceof SeedBag) checklist.complete(Checklist.Step.PLANT);
             if (checklist != null && tool instanceof WateringCan) checklist.complete(Checklist.Step.WATER);
         } catch (FarmException e) {
@@ -203,6 +214,15 @@ public class FarmScreen implements Screen {
         farmer.earn(earned);
         clock.nextDay(rng);
         farm.newDay(clock.getWeather());
+
+        // Get the number of immature crops destroyed by the storm.
+        int stormLosses = farm.getLastStormLosses();
+
+        // Report storm damage in the daily summary when crops were lost.
+        if (stormLosses > 0) {
+            lines.add("Storm destroyed " + stormLosses + " immature crops!");
+        }
+
         String news = farm.getVillager().newDay(clock.getDay(), rng);
         if (news != null) lines.add(news);
         farmer.wakeUp(DOOR_COL, DOOR_ROW, passedOut);
@@ -256,6 +276,11 @@ public class FarmScreen implements Screen {
     @Override
     public void draw(Graphics2D g) {
         farm.draw(g);
+
+        // Apply the current season's color tint to the farm area.
+        g.setColor(clock.getSeason().getTint());
+        g.fillRect(0, 0, Ui.WIDTH, Ui.MAP_HEIGHT);
+
         int col = farmer.facingCol(), row = farmer.facingRow();
         g.setColor(new Color(255, 255, 255, 110));   // the tile SPACE will act on
         g.drawRect(col * Farm.TILE, row * Farm.TILE, Farm.TILE - 1, Farm.TILE - 1);

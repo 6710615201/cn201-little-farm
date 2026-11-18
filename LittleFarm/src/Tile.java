@@ -30,10 +30,26 @@ public class Tile {
         if (type == TileType.SOIL) watered = true;
     }
 
+    /** Check the plot and season before the caller spends a seed or energy. */
+    public void plant(Crop newCrop, Season season) throws FarmException {
+        if (type != TileType.SOIL) throw new FarmException("Till the ground with the hoe first");
+        if (crop != null) throw new FarmException("Something is already growing here");
+        if (!newCrop.canGrowIn(season)) throw new WrongSeasonException(newCrop.getName(), season);
+        crop = newCrop;
+    }
+
+    /** Restore an existing saved crop, even if the season has since changed. */
     public void plant(Crop newCrop) throws FarmException {
         if (type != TileType.SOIL) throw new FarmException("Till the ground with the hoe first");
         if (crop != null) throw new FarmException("Something is already growing here");
         crop = newCrop;
+    }
+
+    /** Storm damage is applied after growth; mature plants are protected. */
+    public boolean removeImmatureCrop() {
+        if (crop == null || crop.isMature()) return false;
+        crop = null;
+        return true;
     }
 
     /** @return the name of what was picked */

@@ -5,7 +5,8 @@ import java.util.Random;
 /** Each kind of weather carries its own odds and effects, so adding a STORM means adding one constant. */
 public enum Weather {
     SUNNY("Sunny", "A fine sunny day", 75, false),
-    RAINY("Rain", "Rain today - no need to water", 25, true);
+    RAINY("Rain", "Rain today - no need to water", 25, true),
+    STORM("Storm", "Storm today - immature crops were lost", 0, true);
 
     private final String label;
     private final String morningText;
@@ -44,6 +45,7 @@ public enum Weather {
                                x + 10 + (int) (10 * Math.cos(a)), y + 10 + (int) (10 * Math.sin(a)));
                 }
                 break;
+            case STORM:
             case RAINY:
                 g.setColor(new Color(190, 200, 215));
                 g.fillOval(x, y + 4, 12, 10);

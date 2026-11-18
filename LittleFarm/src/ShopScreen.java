@@ -61,7 +61,9 @@ public class ShopScreen implements Screen {
 
         g.setFont(Ui.font(13));
         g.setColor(Ui.WOOD);
-        g.drawString(String.format("%-11s %6s %8s %7s %8s", "Crop", "Seed", "Grows", "Sells", "Profit"), left + 30, top + 80);
+        // Read the same crop rules used by Tile when the player plants a seed.
+        g.drawString(String.format("%-11s %6s %8s %7s %8s  %s",
+            "Crop", "Seed", "Grows", "Sells", "Profit", "Seasons"), left + 30, top + 80);
         for (int i = 0; i < crops.length; i++) {
             Crop crop = crops[i];
             int y = top + 110 + i * 30;
@@ -70,8 +72,10 @@ public class ShopScreen implements Screen {
                 g.fillRoundRect(left + 18, y - 19, width - 36, 27, 8, 8);
             }
             g.setColor(Ui.INK);
-            g.drawString(String.format("%-11s %5dG %3d days %6dG %+7dG", crop.getName(), crop.getSeedPrice(),
-                    crop.getDaysToMature(), crop.getSellPrice(), crop.getSellPrice() - crop.getSeedPrice()), left + 30, y);
+            g.drawString(String.format("%-11s %5dG %3d days %6dG %+7dG  %s",
+                crop.getName(), crop.getSeedPrice(), crop.getDaysToMature(),
+                crop.getSellPrice(), crop.getSellPrice() - crop.getSeedPrice(),
+                String.join(", ", crop.getSeasonNames())), left + 30, y);
         }
 
         Crop chosen = crops[row];

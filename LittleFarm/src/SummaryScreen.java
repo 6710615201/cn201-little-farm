@@ -54,6 +54,7 @@ public class SummaryScreen implements Screen {
         if (!farm.isMonthOver()) {
             g.setFont(Ui.font(15));
             g.setColor(Ui.INK);
+            // The clock has advanced, so its current weather belongs to the upcoming morning.
             String weather = "Tomorrow: " + clock.getWeather().getLabel();
             int textX = (Ui.WIDTH - g.getFontMetrics().stringWidth(weather)) / 2;
             g.drawString(weather, textX, top + 262);

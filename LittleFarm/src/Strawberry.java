@@ -6,6 +6,7 @@ public class Strawberry extends Crop {
     private static final int REGROW_DAYS = 2;
 
     @Override public String getName() { return "Strawberry"; }
+    @Override public String[] getSeasonNames() { return new String[] {"Rainy", "Cool"}; }
     @Override public int getDaysToMature() { return 6; }
     @Override public int getSeedPrice() { return 100; }
     @Override public int getSellPrice() { return 60; }

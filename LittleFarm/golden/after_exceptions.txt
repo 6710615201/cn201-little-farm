@@ -1,0 +1,70 @@
+=== 1. load a valid save, then save it again
+day=12 weather=RAINY gold=380 earned=900 can=12
+seeds Turnip=2
+seeds Potato=0
+seeds Strawberry=5
+basket=Turnip x3, Strawberry x1
+villager friendship=2 done=5
+request=3 Turnip 360G 4d
+soil 4,6 crop=none watered=false
+soil 5,6 crop=Turnip/1 watered=true
+soil 6,6 crop=Potato/3 watered=false
+soil 7,6 crop=none watered=false
+soil 8,6 crop=Strawberry/2 watered=true
+soil 4,7 crop=none watered=false
+soil 5,7 crop=none watered=false
+soil 6,7 crop=none watered=false
+soil 7,7 crop=none watered=false
+soil 8,7 crop=none watered=false
+--- file written by save():
+little-farm save 1
+day 12
+weather RAINY
+gold 380
+earned 900
+can 12
+seeds Turnip 2
+seeds Potato 0
+seeds Strawberry 5
+basket Turnip 3
+basket Strawberry 1
+villager 2 5
+request Turnip 3 360 4
+soil 4 6 - 0 dry
+soil 5 6 Turnip 1 wet
+soil 6 6 Potato 3 dry
+soil 7 6 - 0 dry
+soil 8 6 Strawberry 2 wet
+soil 4 7 - 0 dry
+soil 5 7 - 0 dry
+soil 6 7 - 0 dry
+soil 7 7 - 0 dry
+soil 8 7 - 0 dry
+
+=== 2. damaged saves (the game must refuse politely, never crash)
+empty file -> SaveFormatException: line 1 is damaged: the file is empty
+wrong header -> SaveFormatException: line 1 is damaged: not a Little Farm save file
+unknown entry -> SaveFormatException: line 4 is damaged: unknown entry 'silver'
+gold is a word -> SaveFormatException: line 4 is damaged: gold abc
+gold is negative -> SaveFormatException: line 4 is damaged: gold -5
+gold is missing its number -> SaveFormatException: line 4 is damaged: gold
+day is zero -> SaveFormatException: line 2 is damaged: day 0
+unknown weather -> SaveFormatException: line 3 is damaged: weather STORMY
+can is a word -> SaveFormatException: line 6 is damaged: can lots
+unknown seed bag -> SaveFormatException: line 7 is damaged: unknown crop 'Cabbage'
+seeds missing amount -> SaveFormatException: line 7 is damaged: seeds Turnip
+villager friendship too high -> SaveFormatException: line 12 is damaged: villager 9 5
+request for unknown crop -> SaveFormatException: line 13 is damaged: unknown crop 'Cabbage'
+request amount zero -> SaveFormatException: line 13 is damaged: request Turnip 0 360 4
+request too short -> SaveFormatException: line 13 is damaged: request Turnip 3
+soil too short -> SaveFormatException: line 14 is damaged: soil 5 6
+soil off the map -> SaveFormatException: line 14 is damaged: soil 99 99 - 0 dry
+soil unknown crop -> SaveFormatException: line 14 is damaged: unknown crop 'Cabbage'
+soil days not a number -> SaveFormatException: line 14 is damaged: soil 5 6 Turnip x wet
+blank line is fine -> loaded OK
+damage on the last line -> SaveFormatException: line 17 is damaged: soil 8 6 Strawberry two wet
+
+=== 3. describe() and exists()
+no file: exists=false describe=null
+valid:   exists=true describe=Day 12, 380G
+partial: describe=Day 3, ?G

@@ -1,0 +1,18 @@
+little-farm save 1
+day 12
+season Rainy
+weather RAINY
+weatherMode normal
+stormlosses 3
+gold 380
+earned 900
+can 12
+seeds Turnip 2
+seeds Potato 0
+seeds Strawberry 5
+basket Turnip 3
+basket Strawberry 1
+villager 2 5
+request Turnip 3 360 4
+soil 5 6 Potato 3 wet
+soil 6 6 Strawberry 2 dry

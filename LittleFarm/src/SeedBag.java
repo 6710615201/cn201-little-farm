@@ -12,9 +12,9 @@ public class SeedBag implements Tool {
     @Override public int getEnergyCost() { return 1; }
 
     @Override
-    public void use(Tile tile) throws FarmException {
+    public void use(Tile tile, Season season) throws FarmException {
         if (seeds == 0) throw new FarmException("No " + cropName + " seeds left - buy some at the shop");
-        tile.plant(CropFactory.create(cropName));
+        tile.plant(CropFactory.create(cropName), season); // failure leaves seeds unchanged
         seeds--;
     }
 
