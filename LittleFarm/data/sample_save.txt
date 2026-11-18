@@ -2,6 +2,7 @@ little-farm save 1
 day 12
 season Rainy
 weather RAINY
+weatherMode normal
 stormlosses 3
 gold 380
 earned 900
