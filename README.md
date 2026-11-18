@@ -1,54 +1,93 @@
 # Little Farm — CN201
 
-Private three-person Java/Swing course project. Planned extension: seasons.
-This setup does not implement the seasons feature or change the supplied Java code.
+เกมทำฟาร์มบน Java Swing สำหรับผู้เล่นคนเดียว คุณรับช่วงฟาร์มของคุณปู่พร้อมหนี้ **5,000 G** มีเวลา **30 วัน** เพื่อปลูกพืช เก็บเกี่ยว และขายผลผลิต เกมตัดสินจากเงินที่มีอยู่เมื่อจบวันที่ 30 ระหว่างเดือน ฤดูจะเปลี่ยนทุก 10 วัน ส่งผลต่อพืชที่ปลูกได้และโอกาสเกิดพายุ
 
-## Requirements
-- JDK 11 or newer (not just a JRE), with `java` and `javac` on PATH.
-- A desktop environment for the Swing game.
-- No Maven, Gradle, Docker, server, database, or external Java libraries are required.
+เกมรุ่นฤดูกาลและชุดทดสอบในคู่มือนี้อยู่บน [สาขา dev](https://github.com/6710615201/cn201-little-farm/tree/dev)
 
-## Build and run
-Run these commands from the repository root in macOS Terminal, Linux, or Windows Git Bash:
+## เปิดเกม
+
+ใช้ **JDK 11 ขึ้นไป** บนเครื่องที่เปิดหน้าต่างกราฟิกได้ ตรวจว่าติดตั้งพร้อมด้วย `javac -version` และ `java -version` เกมใช้ไลบรารีมาตรฐานของ Java
+
+ถ้าเพิ่งดาวน์โหลดโปรเจกต์ ให้ดึงสาขา `dev` ซึ่งทีมใช้รวมงาน คำสั่งชุดนี้ใช้ได้ใน PowerShell และ Git Bash
+
+```sh
+git clone --branch dev https://github.com/6710615201/cn201-little-farm.git
+cd cn201-little-farm
+```
+
+ถ้ามีโปรเจกต์แล้ว ให้เปิด Terminal ที่โฟลเดอร์หลักของสำเนาที่ใช้สาขา `dev` แล้วรันคำสั่งด้านล่าง
 
 ```sh
 cd LittleFarm
-mkdir -p out
-javac --release 11 -encoding UTF-8 -d out src/*.java
+javac --release 11 -encoding US-ASCII -d out src/*.java
 java -cp out Main
 ```
 
-In Windows PowerShell, use `New-Item -ItemType Directory -Force out` instead of `mkdir -p out`; the Java commands are the same.
+เลือก **New Farm** แล้วเลือกโหมดอากาศ ถ้าอยากเปิดฟาร์มใหม่ในโหมด Monsoon โดยตรง ให้รัน `java -cp out Main monsoon` แล้วเลือก **New Farm** เปลี่ยนคำสุดท้ายเป็น `normal` หรือ `drought` ได้ ส่วน **Continue** จะอ่านโหมดจากไฟล์เซฟ ครั้งถัดไปที่เล่นโค้ดรุ่นเดิม เพียงเปิด Terminal ใน `LittleFarm` แล้วรัน `java -cp out Main`
 
-The committed source is in **LittleFarm/src/**, not src/ at repository root.
-Always launch from LittleFarm so the game's relative save path is consistent.
-The game writes `littlefarm_save.txt` in its working directory. Personal saves and compiled classes are ignored by Git.
+## ลองเล่นวันแรก
 
-## Team Git workflow
-1. Clone this private repository after the owner grants your GitHub account access.
-2. Before starting work: `git switch main`, then `git pull --ff-only origin main`.
-3. Create a task branch: `git switch -c feature/your-task`.
-4. Keep commits small. Review `git diff` and stage only intended files.
-5. Push with `git push -u origin HEAD` and open a pull request targeting main.
-6. Another teammate reviews the diff and checks compilation before merging. Do not force-push main.
+1. เริ่มด้วยเงิน **300 G** และเมล็ด **Turnip 5 เมล็ด** เดินไปข้างแปลงดินสีน้ำตาลแล้วหันเข้าหาแปลง ป้ายข้างช่องจะบอกว่า `Space` ทำอะไรได้ ถ้าเป็นพื้นหญ้า ให้กดหนึ่งครั้งเพื่อพรวนดินก่อน
+2. เลือกเมล็ด Turnip กด `Space` เพื่อปลูก แล้วกดอีกครั้งเพื่อรดน้ำ ถ้าบัวรดน้ำหมด ให้หันเข้าหาบ่อน้ำแล้วกด `Space` เพื่อเติม
+3. กลับไปหันหน้าหาบ้าน กด `Space` แล้วเลือก **Sleep** พืชที่ได้รับน้ำจะโตหนึ่งวันข้ามคืน Turnip พร้อมเก็บเมื่อโตครบ 3 วัน ถ้าอยู่จนเที่ยงคืน ตัวละครจะสลบและตื่นมาด้วยพลังงานครึ่งหนึ่ง
+4. เมื่อพืชโตเต็มที่ ให้หันเข้าหาต้นแล้วกด `Space` เพื่อเก็บเข้าตะกร้า จากนั้นหันเข้าหาลังส่งของและกด `Space` เมื่อเห็น **Ship basket** เงินจะเข้าตอนจบวัน คุณยังเลือกเก็บผลผลิตไว้ส่งตามคำขอของป้าแดงได้
 
-Suggested responsibilities, to confirm as a team:
-- Core seasons/game rules: `feature/seasons-core`.
-- Save/load and exceptions: `feature/season-save`.
-- UI and startup strategy selection: `feature/season-ui-strategy`.
+| อยู่ที่ไหน | ปุ่ม | ใช้ทำอะไร |
+| --- | --- | --- |
+| หน้าฟาร์ม | ลูกศร หรือ `W A S D` | แตะเพื่อหัน กดค้างเพื่อเดิน |
+| หน้าฟาร์ม | `Space` | ทำตามป้ายของช่องด้านหน้า เช่น ปลูก รดน้ำ เก็บเกี่ยว คุย หรือเข้าร้าน |
+| หน้าฟาร์ม | `1`–`3` หรือ `Q` / `E` | เลือกชนิดเมล็ดโดยตรงหรือเลื่อนถุงเมล็ด |
+| หน้าฟาร์ม | `Esc` หรือ `P` | เปิดเมนูพักเกม |
+| เมนู / หน้าสรุปวัน | ลูกศรขึ้นลง แล้ว `Enter` หรือ `Space` | เลือกรายการในเมนู หรือกดยืนยันเพื่อไปต่อจากหน้าสรุป |
+| ร้านเมล็ด | ขึ้นลงเลือกพืช ซ้ายขวาปรับจำนวน | `Enter` หรือ `Space` เพื่อซื้อ และ `Esc` เพื่อกลับฟาร์ม |
 
-Coordinate shared classes before editing them. Capture golden output from the original behavior **before** refactoring. Keep refactoring commits separate from feature commits. A branch name alone does not implement a feature or give a teammate access.
+### ฤดู พืช และพายุ
 
-## Automated check
-`.github/workflows/java-compile.yml` compiles the unchanged project with JDK 11 and 21 on pushes and pull requests. It does not launch Swing or verify game behavior. Add meaningful tests separately; a green compile check does not mean the assignment is complete.
+| วันที่ | ฤดู | พืชที่เริ่มปลูกได้ | โอกาสพายุในโหมด Normal |
+| --- | --- | --- | --- |
+| 1–10 | ร้อน (Hot) | Turnip, Potato | 0% |
+| 11–20 | ฝน (Rainy) | Potato, Strawberry | 30% |
+| 21–30 | หนาว (Cool) | Turnip, Strawberry | 10% |
 
-## Before submission
-Consult the teacher's assignment as the source of truth. Still required as the team develops:
-- New system with meaningful abstraction and implementations.
-- Strategy/Factory and startup selection, new-state save/load, required exceptions.
-- Golden-output evidence and separately committed refactoring.
-- `design.pdf` (maximum 4 pages), `AI-log.md`, and `data/sample_save.txt` in the final submission structure.
-- Each member's own code, commits, and understanding; manual game checks and demo.
+ร้านเมล็ดมีคอลัมน์ **Seasons** ให้ดูก่อนซื้อ ถ้าพยายามปลูกผิดฤดู เกมจะบอกเหตุผลและเก็บเมล็ดกับพลังงานไว้ให้ ต้นที่ปลูกสำเร็จแล้วโตข้ามฤดูได้
 
-Do not commit personal credentials, personal save files, or generated class files.
-Keep the repository private and do not share course source with other groups.
+- **Normal** สุ่มพายุตามฤดู วันที่ไม่เกิดพายุจึงสุ่มแดด 75% หรือฝน 25% เช่น ในฤดูฝน โอกาสรวมคือแดด 52.5% ฝน 17.5% และพายุ 30%
+- **Drought** แดด 90% ฝน 10% พายุ 0% ทุกฤดู
+- **Monsoon** แดด 10% ฝน 60% พายุ 30% ทุกฤดู
+
+วันแรกของฟาร์มใหม่เริ่มด้วยแดด เมื่อข้ามวัน เกมให้พืชใช้ผลการรดน้ำของเมื่อวานก่อน แล้วพายุจึงทำลายพืชที่ยังโตไม่เต็มที่ ต้นที่เพิ่งโตเต็มที่ในคืนนั้นรอด ฝนกับพายุทำให้ดินเปียกสำหรับวันใหม่ หน้าสรุปรายงานจำนวนต้นที่เสียในวันนั้น ส่วนเซฟเก็บยอดสะสมตลอดเกม
+
+## เซฟของผู้เล่นและเซฟตัวอย่าง
+
+เกมบันทึกตอนจบวันลง `littlefarm_save.txt` ในโฟลเดอร์ที่ใช้รันเกม จึงควรเปิดจาก `LittleFarm` ทุกครั้ง เมนู **Continue** จะปรากฏเมื่อพบไฟล์นี้ เมื่อจบวันที่ 30 เกมลบเซฟของรอบนั้นและแสดงผลชำระหนี้
+
+ทีมเก็บ [เซฟตัวอย่าง](https://github.com/6710615201/cn201-little-farm/blob/dev/LittleFarm/data/sample_save.txt) ไว้ให้ลองโหลดจากจุดเดียวกันได้ทันที ไฟล์นี้เป็นฟาร์มวันที่ 12 ฤดูฝน มีเงิน 380 G และเสียพืชจากพายุสะสม 3 ต้น เมื่อโหลดจะใช้โหมด `normal` เพราะไฟล์ตัวอย่างไม่มีฟิลด์ `weatherMode`
+
+**วิธีสาธิต Continue** ในสำเนาโปรเจกต์สำหรับซ้อม ให้คัดลอก `LittleFarm/data/sample_save.txt` เป็น `LittleFarm/littlefarm_save.txt` แล้วเปิดเกมและกด **Continue** หากต้องการสาธิตเซฟเสีย ให้ปิดเกมแล้วแก้ไฟล์สำเนา โดย **แทรก** `weatherMode xyz` หลัง `weather RAINY` บรรทัดใหม่จะเป็นบรรทัด 5 และ `stormlosses 3` จะเลื่อนไปบรรทัด 6 เมื่อกด **Continue** อีกครั้ง เกมจะแจ้งชื่อโหมดที่ผิดพร้อมเลขบรรทัด แล้วเปิดฟาร์มใหม่
+
+## ทีมตรวจอะไรก่อน merge เข้า dev
+
+ทีมแยกงานแต่ละชิ้นไปทำบน branch ของตัวเอง แล้วเปิด Pull Request (PR) โดยเลือก **base เป็น `dev`** ในหน้า PR ทีมดู **Files changed** เพื่อรีวิวสิ่งที่แก้ และดู **Checks** เพื่ออ่านผลคอมไพล์จาก GitHub Actions เมื่อเพื่อนตรวจการเปลี่ยนแปลงและลองพฤติกรรมที่เกี่ยวข้องแล้ว ทีมจึงกด merge เข้า `dev`
+
+| ไฟล์ | หน้าที่ |
+| --- | --- |
+| [`.github/workflows/java-compile.yml`](.github/workflows/java-compile.yml) | กำหนดให้ GitHub Actions คอมไพล์ `LittleFarm/src/*.java` ทุกครั้งที่ push หรือเปิดหรืออัปเดต PR โดยใช้ JDK 11 และ 21 ทั้งคู่ตั้งเป้า Java 11 และอ่านซอร์สแบบ UTF-8 เครื่องหมายผ่านใน Checks บอกว่าคอมไพล์สำเร็จ ส่วนการรันเทสต์และทดลองเล่นเป็นขั้นที่ทีมทำแยก |
+| [`.gitignore`](.gitignore) | บอก Git ให้ข้ามไฟล์ที่แต่ละเครื่องสร้างเอง เช่น `out/`, `*.class` และเซฟส่วนตัว `littlefarm_save.txt` จึงรีวิวเฉพาะสิ่งที่ทีมตั้งใจส่งได้ง่ายขึ้น |
+| [`LittleFarm/test/`](https://github.com/6710615201/cn201-little-farm/tree/dev/LittleFarm/test) | โปรแกรมทดสอบที่เรียกคลาสเกมโดยตรง ใช้ลองทั้งข้อมูลปกติและกรณีผิด เช่น โหลดโหมดอากาศที่ไม่มีอยู่ |
+| [`LittleFarm/golden/`](https://github.com/6710615201/cn201-little-farm/tree/dev/LittleFarm/golden) | ผลลัพธ์ข้อความที่เก็บไว้เทียบพฤติกรรมของระบบเซฟ `before.txt` กับ `after.txt` เป็นคู่ก่อนและหลังจัดโครงสร้างโค้ดใหม่ ส่วน `after_exceptions.txt` และ `after_season.txt` เก็บผลหลังเพิ่มข้อยกเว้นและฤดูตามลำดับ |
+| [`AI-log.md`](AI-log.md) | บันทึกว่าทีมขอให้ AI ช่วยอะไร นำสิ่งใดมาใช้ และตรวจงานอย่างไร ใช้อ่านประกอบประวัติงาน |
+
+### รันเทสต์ในเครื่อง
+
+จากโฟลเดอร์ `LittleFarm` หลังคอมไพล์เกมตามขั้นเปิดเกมแล้ว ให้รัน
+
+```sh
+javac --release 11 -encoding US-ASCII -cp out -d out test/*.java
+java -cp out SaveErrorTest
+java -cp out SeasonSaveTest
+java -cp out WeatherModeSaveTest
+java -cp out WeatherStrategyTest
+java -cp out GoldenSaveTest
+```
+
+สี่ชุดแรกตรวจข้อผิดพลาดในเซฟ การเก็บฤดูและยอดพายุ การคืนค่าโหมดอากาศ และการสุ่มอากาศ รวม 47 กรณี ส่วน `GoldenSaveTest` พิมพ์สถานะเกมและผลอ่านเขียนเซฟให้เปรียบเทียบทีละบรรทัด สำหรับรุ่นที่เพิ่มโหมดอากาศ ผลปัจจุบันมีบรรทัด `weatherMode normal` เพิ่มขึ้นหนึ่งบรรทัดจาก `golden/after_season.txt`
