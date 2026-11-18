@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -114,7 +115,7 @@ public class SaveGame {
             case "day":     loadDay(parts, clock); break;
             case "season":  loadSeason(parts, lineNumber, clock); break;
             case "weather": loadWeather(parts, clock); break;
-            case "weatherMode": loadWeatherMode(parts, clock); break;
+            case "weatherMode": loadWeatherMode(parts, lineNumber, clock); break;
             case "stormlosses": loadStormLosses(parts, farm); break;
             case "gold":    loadGold(parts, farmer); break;
             case "earned":  loadEarned(parts, farmer); break;
@@ -151,8 +152,14 @@ public class SaveGame {
     }
 
     // Restore the selected weather mode from the save file.
-    private void loadWeatherMode(String[] parts, GameClock clock) {
-        clock.setWeatherMode(parts[1]);
+    private void loadWeatherMode(String[] parts, int lineNumber, GameClock clock) throws SaveFormatException {
+        // StrategyFactory turns a word it does not know into "normal"; a save file must not.
+        String given = parts[1];
+        String mode = StrategyFactory.normalizeName(given);
+        if (!mode.equals(given.trim().toLowerCase(Locale.ROOT))) {
+            throw new SaveFormatException(lineNumber, "unknown weather mode '" + given + "'");
+        }
+        clock.setWeatherMode(mode);
     }
 
     private void loadGold(String[] parts, Farmer farmer) {
